@@ -1,0 +1,23 @@
+---
+title: "DATA607_Assign1"
+author: "Vincent Colardi"
+date: "August 30, 2018"
+output: html_document
+---
+## Assignment - Loading Data into a Data Frame
+#### This RMD file reads the Mushroom dataset into a dataframe, adds more descriptive column names, replaces the Class column values with more descriptive names, and subset the DF based on the class designation i.e. Edible or Poinsonous. 
+
+```{r}
+df1 <- read.table("https://raw.githubusercontent.com/vcolardi2218/DS607/master/agaricus-lepiota.csv",header=FALSE, sep=",", stringsAsFactors=FALSE)
+colnames(df1) <-c("Class","Cap Shape","Cap Surface","Cap Color")
+df1$Class <- replace(df1$Class, df1$Class == "p", "Poison") 
+df1$Class <- replace(df1$Class, df1$Class == "e","Edible")
+summary(df1)
+head(df1 [,1:4],100)
+df1_Poison <- subset(df1,Class == "Poison")
+summary(df1_Poison)
+head(df1_Poison [,1:4],100)
+df1_Edible <- subset(df1,Class == "Edible")
+summary(df1_Edible)
+head(df1_Edible [,1:4],100)
+```
