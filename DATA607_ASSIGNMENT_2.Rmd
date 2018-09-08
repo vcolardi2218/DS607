@@ -1,0 +1,40 @@
+---
+title: "DATA607_ASSIGNMENT_2"
+author: "Vincent Colardi"
+date: "September 7, 2018"
+output: html_document
+---
+
+### Connect to MYSQL Movies Database
+```{r}
+require(RODBC)
+db <- odbcConnect("movies_DB")
+```
+
+### Query the Critics Table which has the list of moviegoers
+```{r}
+criticsTable <- sqlQuery(db, "SELECT firstname AS 'Critics Firstname', lastname AS 'Critics Lastname' FROM critics ORDER BY lastname, firstname", stringsAsFactors=FALSE)
+criticsTable
+```
+
+### Query the Movies Table which has the list of Movies being rated
+```{r}
+moviesTable <- sqlQuery(db, "SELECT name AS 'Movie Title' FROM movies ORDER BY name", stringsAsFactors=FALSE)
+moviesTable
+```
+
+### Join the Ratings, Critics, and Movies tables to list out the movie ratings by critic
+```{r}
+moviesRated <- sqlQuery(db, 
+"SELECT critics.firstname AS 'Firstname', critics.lastname AS 'Lastname', movies.name AS 'Title', ratings.rating AS 'Rating'
+FROM critics
+LEFT JOIN ratings
+on critics.personid = ratings.personid
+left join movies
+ON movies.movieid = ratings.movieid
+WHERE movies.movieid IS NOT NULL
+AND ratings.ratingsid IS NOT NULL 
+ORDER BY critics.lastname, critics.firstname, movies.name",stringsAsFactors=FALSE)
+moviesRated
+
+```
